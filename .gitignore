@@ -1,0 +1,8 @@
+# Data
+data/
+
+# Python
+__pycache__/
+
+# wandb
+wandb/
