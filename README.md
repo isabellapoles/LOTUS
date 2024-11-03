@@ -134,7 +134,14 @@ Model weights are available in the `./checkpoint` directory.
 ### Citation
 If you find our work useful in your research, please consider citing our paper:
 ```
-*COMING SOON*
+@inproceedings{poles2024letting,
+  title={Letting Osteocytes Teach SR-MicroCT Bone Lacunae Segmentation: A Feature Variation Distillation Method via Diffusion Denoising},
+  author={Poles, Isabella and Santambrogio, Marco D and D’Arnese, Eleonora},
+  booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention},
+  pages={383--393},
+  year={2024},
+  organization={Springer}
+}
 ```
 
 ### Acknowledgments
