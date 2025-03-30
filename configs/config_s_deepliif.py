@@ -8,20 +8,20 @@ class Config(object):
 
     # wandb 
     wandb_params = {
-    "base_path": "/home",
+    "base_path": "/content",
     "project_name":"lotus",
-    "entity": "user",
+    "entity": "isabellapoles",
     "start_epoch": 0,
     "epoch_num" : 1800
     }
     
     # Training details
     run_id = "", 
-    run_id_teacher = "gm7d6x8v", # gm7d6x8v (binary), 2srqu2wu (positive and negative cells classification)
+    run_id_teacher = "2srqu2wu", # gm7d6x8v (binary), 2srqu2wu (positive and negative cells classification)
     run_id_student = "xxxxxxxx", 
     dataset_name_teacher = "DeepLIIF-mm",
     dataset_name_student = "DeepLIIF-mm",
-    klass_to_distill = [1], # [1] (binary), [1, 2] (positive and negative cells classification)
+    klass_to_distill = [1, 2], # [1] (binary), [1, 2] (positive and negative cells classification)
     lr = 0.001, 
     batch_size = 15,
     crop_size_row = 512, 
@@ -55,7 +55,7 @@ class Config(object):
     # Model parameters
     model_params = {
         "input_ch": 3,
-        "nr_classes": 1, # 1 (binary), 3 (positive and negative cells classification)
+        "nr_classes": 3, # 1 (binary), 3 (positive and negative cells classification)
         "probab_th": .5
     }
     
@@ -71,7 +71,7 @@ class Config(object):
     # Model testing parameters
     test_params = {
         "phase": "test",
-        "run_id": "1ft1z7f9", # 1ft1z7f9 (binary), eruoe5fp (positive and negative cells classification)
+        "run_id": "eruoe5fp", # 1ft1z7f9 (binary), eruoe5fp (positive and negative cells classification)
         "dataset_name": "DeepLIIF-mm",
         "img_dim_row": 512, 
         "img_dim_col": 512, 

@@ -7,9 +7,9 @@ class Config(object):
 
     # wandb 
     wandb_params = {
-    "base_path": "/home",
+    "base_path": "/content",
     "project_name":"lotus",
-    "entity": "user",
+    "entity": "isabellapoles",
     "start_epoch": 0,
     "epoch_num" : 200
     }
