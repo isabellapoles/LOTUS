@@ -16,6 +16,7 @@ from tqdm import tqdm
 from glob import glob
 from skimage.morphology import remove_small_objects
 
+from torchvision.utils import save_image
 from torch.utils.data import DataLoader
 
 from utils import *
@@ -60,6 +61,10 @@ torch.backends.cudnn.deterministic = True
 
 CHECKPOINT_PATH = os.path.join (args.checkpoint_path, id)
 os.makedirs(CHECKPOINT_PATH, exist_ok=True)
+# Saving folders for demo
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Patches'), exist_ok=True)
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'GT'), exist_ok=True)
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Predictions'), exist_ok=True)
 
 phase = configs.test_params["phase"]
 
@@ -96,7 +101,7 @@ model_ft.eval()
 with torch.no_grad():
     patients_dsc, patients_aji, patients_pq = [], [], []
     
-    for batch in tqdm(dataloaders[phase]):
+    for batch_idx, batch in enumerate(tqdm(dataloaders[phase])):
 
         imgs = batch['img'].to(device)
         masks = batch['mask'].to(device)
@@ -116,6 +121,11 @@ with torch.no_grad():
             mask_pred_rgb[2, masks_pred[0] == 2] = 255
             mask_rgb[0, masks[0, 0, ...] == 1] = 255
             mask_rgb[2, masks[0, 0, ...] == 2] = 255
+
+            # Saving predictions, ground truths and image patches for demo
+            save_image(mask_pred_rgb, os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Predictions', 'patch_' + str(batch_idx) + '.png'))
+            save_image(mask_rgb, os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'GT', 'patch_' + str(batch_idx) + '.png'))
+            save_image(imgs, os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Patches', 'patch_' + str(batch_idx) + '.png'))
 
         # Copy and bring to cpu
         masks_set_pred = masks_pred.cpu().numpy()

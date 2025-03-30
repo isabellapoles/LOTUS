@@ -2,6 +2,7 @@
 
 import os
 import re
+import cv2
 import time
 import random
 import logging
@@ -18,6 +19,7 @@ from glob import glob
 from medpy import metric
 from skimage.morphology import remove_small_objects
 
+from torchvision.utils import save_image
 from torch.utils.data import DataLoader
 
 from utils import *
@@ -65,6 +67,10 @@ torch.backends.cudnn.deterministic = True
 
 CHECKPOINT_PATH = os.path.join (args.checkpoint_path, id)
 os.makedirs(CHECKPOINT_PATH, exist_ok=True)
+# Saving folders for demo
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Patches'), exist_ok=True)
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'GT'), exist_ok=True)
+os.makedirs(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Predictions'), exist_ok=True)
 
 phase = configs.test_params["phase"]
 imgs_path_list = glob(os.path.join(args.dataset_path, configs.test_params["dataset_name"], '*/tissue images/*.tif'))
@@ -94,7 +100,7 @@ model_ft.eval()
 
 with torch.no_grad():
     patients_dsc, patients_hd, patients_aji, patients_pq = [], [], [], []
-    for batch in tqdm(dataloaders[phase]):
+    for batch_idx, batch in enumerate(tqdm(dataloaders[phase])):
         imgs = batch['img'].to(device).squeeze(0)
         masks = batch['mask'].to(device).squeeze(0)
 
@@ -112,6 +118,16 @@ with torch.no_grad():
             masks_set_gt = masks[patch].cpu().numpy()
             masks_set_gt[masks_set_gt>0] = 1
 
+            # Saving predictions, ground truths and image patches for demo
+            if random.random() < 0.01:
+              # Convert to uint8 and scale to [0, 255]
+              pred2save = (masks_set_pred.squeeze(0) * 255).astype(np.uint8)
+              gt2save = (masks_set_gt.squeeze(0) * 255).astype(np.uint8)
+
+              cv2.imwrite(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Predictions', 'patch_' + str(batch_idx) + '_' + str(patch) + '.png'), pred2save.squeeze(0))
+              cv2.imwrite(os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'GT', 'patch_' + str(batch_idx) + '_' + str(patch) + '.png'), gt2save)
+              save_image(imgs[patch], os.path.join(args.dataset_path, configs.test_params["dataset_name"], 'Patches', 'patch_' + str(batch_idx) + '_' + str(patch) + '.png'))
+                          
             # Segmentation metrics computation
             if (sum(np.unique(np.squeeze(masks_set_pred.astype(np.uint8)))) + sum(np.unique(np.squeeze(masks_set_gt.astype(np.uint8)))) == 2): 
                 HD95.append(metric.binary.hd95(np.squeeze(masks_set_gt.astype(np.uint8)), np.squeeze(masks_set_pred.astype(np.uint8))))
