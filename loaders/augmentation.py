@@ -18,7 +18,7 @@ def albumentation_aug(p, crop_size_row, crop_size_col):
         HueSaturationValue(hue_shift_limit=20, sat_shift_limit=20, val_shift_limit=20, p=0.1),
         HorizontalFlip(always_apply=False, p=0.5),
         VerticalFlip(always_apply=False, p=0.5),
-        RandomRotate90(always_apply=False, p=0.5),
+        RandomRotate90(p=0.5), # always_apply=False -> depracated
         ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=20, interpolation=1, 
                          border_mode=4, always_apply=False, p=0.1),
 
