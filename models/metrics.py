@@ -186,8 +186,8 @@ def fast_pq(true, pred, match_iou=0.5):
 
     true = np.copy(true)
     pred = np.copy(pred)
-    #true[true > 0] = 1
-    #pred[pred > 0] = 1
+    true[true > 0] = 1
+    pred[pred > 0] = 1
 
     true_id_list = list(np.unique(true))
     pred_id_list = list(np.unique(pred))
