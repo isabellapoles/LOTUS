@@ -83,31 +83,31 @@ pip3 install -r requirements.txt
 First, we trained the osteocyte segmentation single-modal model (*teacher* model) with H&E.
 It comes pre-trained on the [NuInsSeg](https://www.kaggle.com/datasets/ipateam/nuinsseg) dataset. 
 ```
-python3 train_s_bonesai.py --checkpoint-path './checkpoint/bonesai' \
-                          --dataset-path './data' \
-                          --model_configs 'config_s_bonesai.py' \
-```
-Next, the histopathology-enhanced model for lacunae segmentation (*student* model) on SR-microCT images is trained.
-```
 python3 train_t_bonesai.py --checkpoint-path './checkpoint/bonesai' \
                           --dataset-path './data' \
                           --model_configs 'config_t_bonesai.py' \
+```
+Next, the histopathology-enhanced model for lacunae segmentation (*student* model) on SR-microCT images is trained.
+```
+python3 train_s_bonesai.py --checkpoint-path './checkpoint/bonesai' \
+                          --dataset-path './data' \
+                          --model_configs 'config_s_bonesai.py' \
 ```
 The model parameters, hyperparameters, pre-trained weights, and checkpoint variables to be used for the *teacher* and the *student* have to be specified in the `configs/config_x_bonesai.py` file variables.     
 
 The same holds if you want to reproduce the results with the DeepLIIF dataset. 
 First, we pretrained the segmentation single-modal model (*teacher* model) with IHC.
 ```
-python3 train_s_deepliif.py --checkpoint-path './checkpoint/DeepLIIF' \
+python3 train_t_deepliif.py --checkpoint-path './checkpoint/DeepLIIF' \
                             --dataset-path './data' \
-                            --model_configs 'config_s_deepliif.py' \
+                            --model_configs 'config_t_deepliif.py' \
 ```
 Next, the IHC-enhanced model for cell segmentation (*student* model) on DAPI images is trained.
 
 ```
-python3 train_t_deepliif.py --checkpoint-path './checkpoint/DeepLIIF' \
+python3 train_s_deepliif.py --checkpoint-path './checkpoint/DeepLIIF' \
                             --dataset-path './data' \
-                            --model_configs 'config_t_deepliif.py' \
+                            --model_configs 'config_s_deepliif.py' \
 ```
 The model parameters, hyperparameters, pre-trained weights, and checkpoint variables to be used for the *teacher* and the *student* have to be specified in the `configs/config_x_deepliif.py` file variables. 
 
@@ -125,7 +125,7 @@ python3 test_deepliif.py --checkpoint-path './checkpoint/DeepLIIF' \
                         --dataset-path './data' \
                         --model_configs 'config_s_deepliif.py' \
 ```
-The model's pre-trained weights and checkpoint variables for the *student* must be specified in the `configs/config_x_deepliif.py` file variables. 
+The model's pre-trained weights and checkpoint variables for the *student* must be specified in the `configs/config_s_bonesai.py` and `configs/config_s_deepliif.py` files variables. 
 
 **5. Model weights** 
 
