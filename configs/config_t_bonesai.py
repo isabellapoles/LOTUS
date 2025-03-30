@@ -35,7 +35,7 @@ class Config(object):
         nr_patches = 50,
         dataset_name = "bonesai-microct",
         lr = 0.0001, 
-        batch_size = 16,
+        batch_size = 1, # Ex. batch_size for demo, original one = 16
         crop_size_row = 512, 
         crop_size_col = 512
 
