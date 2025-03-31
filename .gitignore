@@ -6,3 +6,6 @@ __pycache__/
 
 # wandb
 wandb/
+
+# .DS_Store for MacOS editing
+**/.DS_Store
